@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clause Quest: Main vs. Subordinate</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #game-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+        }
+        h1 { color: #2c3e50; }
+        #sentence-display {
+            font-size: 1.4rem;
+            margin: 2rem 0;
+            line-height: 1.6;
+            min-height: 80px;
+        }
+        .highlight {
+            background-color: #fff3cd;
+            border-bottom: 3px solid #ffc107;
+            padding: 2px 5px;
+            font-weight: bold;
+        }
+        .btn-container {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        button {
+            padding: 12px 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            transition: transform 0.1s, background-color 0.2s;
+        }
+        button:active { transform: scale(0.98); }
+        .main-btn { background-color: #3498db; color: white; }
+        .main-btn:hover { background-color: #2980b9; }
+        .sub-btn { background-color: #9b59b6; color: white; }
+        .sub-btn:hover { background-color: #8e44ad; }
+        #feedback {
+            margin-top: 1.5rem;
+            font-weight: bold;
+            height: 20px;
+        }
+        #score {
+            margin-top: 1rem;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <h1>Clause Quest</h1>
+    <p>Is the <span style="color: #ffc107; font-weight: bold;">highlighted</span> part a Main or Subordinate clause?</p>
+    
+    <div id="sentence-display"></div>
+
+    <div class="btn-container">
+        <button class="main-btn" onclick="checkAnswer('main')">Main Clause</button>
+        <button class="sub-btn" onclick="checkAnswer('subordinate')">Subordinate Clause</button>
+    </div>
+
+    <div id="feedback"></div>
+    <div id="score">Score: 0 | Remaining: 10</div>
+</div>
+
+<script>
+    const questions = [
+        { text: "The sun was shining <span class='highlight'>even though it was cold</span>.", answer: "subordinate" },
+        { text: "<span class='highlight'>I went to the park</span> because I was bored.", answer: "main" },
+        { text: "The dog barked <span class='highlight'>while the mailman delivered letters</span>.", answer: "subordinate" },
+        { text: "<span class='highlight'>Before the bell rang</span>, the students packed their bags.", answer: "subordinate" },
+        { text: "She bought a new dress <span class='highlight'>which she wore to the party</span>.", answer: "subordinate" },
+        { text: "The cake was delicious <span class='highlight'>although it was slightly burnt</span>.", answer: "subordinate" },
+        { text: "<span class='highlight'>We arrived late</span> because of the traffic.", answer: "main" },
+        { text: "The team celebrated <span class='highlight'>after they won the trophy</span>.", answer: "subordinate" },
+        { text: "<span class='highlight'>If it rains tomorrow</span>, the match will be cancelled.", answer: "subordinate" },
+        { text: "The bird flew away <span class='highlight'>when the cat approached</span>.", answer: "subordinate" }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+
+    function loadQuestion() {
+        if (currentQuestionIndex < questions.length) {
+            document.getElementById('sentence-display').innerHTML = questions[currentQuestionIndex].text;
+            document.getElementById('feedback').innerText = "";
+            updateScoreDisplay();
+        } else {
+            showFinalResults();
+        }
+    }
+
+    function checkAnswer(userChoice) {
+        const feedback = document.getElementById('feedback');
+        const correctAnswer = questions[currentQuestionIndex].answer;
+
+        if (userChoice === correctAnswer) {
+            feedback.innerText = "Correct! Well done.";
+            feedback.style.color = "#27ae60";
+            score++;
+        } else {
+            feedback.innerText = "Incorrect. Try the next one!";
+            feedback.style.color = "#e74c3c";
+        }
+
+        currentQuestionIndex++;
+        setTimeout(loadQuestion, 1500);
+    }
+
+    function updateScoreDisplay() {
+        document.getElementById('score').innerText = `Score: ${score} | Remaining: ${questions.length - currentQuestionIndex}`;
+    }
+
+    function showFinalResults() {
+        document.getElementById('game-container').innerHTML = `
+            <h1>Game Over!</h1>
+            <p style="font-size: 1.5rem;">Your final score: <strong>${score} / ${questions.length}</strong></p>
+            <button onclick="location.reload()" style="background-color: #2c3e50; color: white;">Play Again</button>
+        `;
+    }
+
+    loadQuestion();
+</script>
+
+</body>
+</html>
